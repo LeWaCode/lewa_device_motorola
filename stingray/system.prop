@@ -1,0 +1,4 @@
+#
+# system.prop for stingray
+#
+ro.cwm.prefer_tar=true

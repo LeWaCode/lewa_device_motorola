@@ -1,0 +1,9 @@
+# mount point	fstype		device
+
+/system		ext4		/dev/block/platform/sdhci-tegra.3/by-name/system
+/cache		ext4		/dev/block/platform/sdhci-tegra.3/by-name/cache
+/data		auto		/dev/block/platform/sdhci-tegra.3/by-name/userdata
+# Why is misc failing?
+#/misc 		emmc 		/dev/block/platform/sdhci-tegra.3/by-name/misc
+/boot		emmc		/dev/block/platform/sdhci-tegra.3/by-name/boot
+/recovery	emmc		/dev/block/platform/sdhci-tegra.3/by-name/recovery

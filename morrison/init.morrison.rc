@@ -1,0 +1,197 @@
+on init
+    exec /sbin/charge_only_mode
+
+on boot
+    # SmartassV2 governor
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 528000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 122880
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor smartassV2
+    #Low Memory Killer
+    write /sys/module/lowmemorykiller/parameters/minfree 1536,2048,4096,5120,15360,23040
+    # Reboot to recovery
+    chown system system /dev/mtd/mtd3
+    mkdir /data/misc/wifi 0777 wifi wifi
+    exec rmdir /data/misc/wifi/sockets
+    mkdir /data/misc/wifi/sockets 0777 wifi wifi
+    mkdir /data/system 0771 system system
+    mkdir /data/system/wpa_supplicant 0771 wifi wifi
+    mkdir /data/media system 0775 system
+    exec rm /data/misc/dhcp/dhcpcd-eth0.lease
+    exec rm /data/misc/dhcp/dhcpcd-eth0.pid
+    chown wifi wifi /data/misc/wifi/wpa_supplicant.conf
+    mkdir /data/misc/dhcp 0770 dhcp dhcp
+    #    chown bluetooth bluetooth /sys/module/board_morrison/parameters/bluetooth_power_on
+    #    chmod 0660 /sys/module/board_morrison/parameters/bluetooth_power_on
+    exec chown bluetooth bluetooth /proc/bt_power
+    chmod 0666 /proc/bt_power
+    mkdir /data/radio 0777 system system
+
+# Camera
+    mkdir /cache/tmp 0666 system system
+    mount tmpfs tmpfs /cache/tmp
+
+# Vibrator
+    chown system system /sys/class/vibrator/vibrator/enable
+
+# Broadcom stuff
+    chown bluetooth bluetooth /sys/module/board_morrison/parameters/bluetooth_power_on
+    chmod 0660 /sys/module/board_morrison/parameters/bluetooth_power_on
+
+# Bluetooth
+    chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
+    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
+
+# 12m
+    mkdir /data/local/12m 0771 system system
+    mkdir /data/local/12m/batch 0771 system system
+    mkdir /data/local/12m/batch/log 0771 system system
+ 
+# Accelerometer
+    chown system system /sys/class/i2c-adapter/i2c-0/0-0018/mode
+    chmod 0664 /sys/class/i2c-adapter/i2c-0/0-0018/mode
+
+# hw accel
+    symlink /dev/msm_hw3dc /dev/hw3dc
+    symlink /dev/msm_hw3dm /dev/hw3dm
+
+# Clearing FM/BT reference count temp file  contents
+    write /data/bluedroid_ref 123456
+    chmod 0777 /data/bluedroid_ref
+
+# Backwards compatibility?
+    symlink /dev/ttyHS0 /dev/ttyMSM0
+
+# Touchpad driver
+service touchpad /system/bin/touchpad -a /data/touchpad.log
+    class HW
+    user system
+    oneshot
+
+# FMRadio Service
+# service fmradio /system/bin/fmradioserver
+#     class BT
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL -d eth0
+    class WLAN
+    #user system #- this makes socket() calls fail with permission denied
+    group dhcp
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n
+    group dhcp
+    disabled
+    oneshot
+
+service autoip /system/bin/dhcpcd -B -d eth0
+    class WLAN
+    #user system  #- this makes socket() calls fail with permission denied
+    group dhcp
+    disabled
+    oneshot
+
+service wpa_supplicant /system/bin/wpa_supplicant -D wext -i eth0 -c /data/misc/wifi/wpa_supplicant.conf
+    class WLAN
+    #user system - this makes socket() calls fail with permission denied
+    socket wpa_eth0 dgram 0660 wifi wifi
+    group wifi
+    disabled
+    oneshot
+    
+# E-compass  daemon
+service akmd2 /system/bin/akmd2 -f /system/etc/akm/akmd_set.cfg
+    user system
+    group input
+    class HW
+    oneshot
+
+## TCMD
+#service tcmd /system/bin/tcmd_engine usb0
+#    user system - this makes reboot failing
+#    group system inet
+#    class TCMD
+
+service port_bridge /system/bin/port_bridge /dev/smd0 /dev/ttyHSUSB0
+	user radio
+	group system
+    class TCMD
+
+
+service btenable /system/xbin/busybox sh /system/bin/btenable.sh
+    oneshot
+
+service hciattach /system/bin/hciattach -s 3000000 /dev/ttyMSM0 any 3000000 flow
+    group bluetooth net_bt_admin misc
+    disabled
+    oneshot
+
+service hcid /system/bin/hcid -s -n -f /etc/bluez/hcid.conf
+    class BT
+    socket bluetooth stream 660 bluetooth bluetooth
+    socket dbus_bluetooth stream 660 bluetooth bluetooth
+    # init.rc does not yet support applying capabilities, so run as root and
+    # let hcid drop uid to bluetooth with the right linux capabilities
+    group bluetooth net_bt_admin misc
+    disabled
+
+service fuel_gauge /system/bin/fuel_gauge --all
+    class TCMD
+    oneshot    
+    
+service qmuxd /system/bin/qmuxd
+    class HW
+
+on property:sys.motorola.suspended=1
+    class_stop zygote_services
+
+on property:sys.motorola.suspended=0
+    class_start zygote_services
+
+#on property:sys.motorola.infactory=1
+#    class_start ADB
+#    class_start TCMD
+#    class_start TOOL
+#    class_start ANDROID
+#    class_start MEDIA
+#    class_start BT
+#    class_start WLAN
+#    class_start HW
+    
+on property:sys.motorola.infactory=2
+    class_start ADB
+    class_start TCMD
+    class_start TOOL
+    class_start RIL
+    class_start pre-zygote_services
+    class_start zygote_services
+    class_start post-zygote_services
+    class_start ANDROID
+    class_start MEDIA
+    class_start BT
+    class_start WLAN
+    class_start HW
+    
+
+on property:sys.motorola.infactory=0
+    class_start ADB
+    class_start TOOL
+    class_start RIL
+    class_start pre-zygote_services
+    class_start zygote_services
+    class_start post-zygote_services
+    class_start ANDROID
+    class_start MEDIA
+    class_start BT
+    class_start WLAN
+    class_start HW
+    class_start TCMD
+
+on property:persist.factorytest=1
+    stop zygote
+
+on property:persist.factorytest=2
+    stop zygote
+
+on property:persist.factorytest=0
+    start zygote
+

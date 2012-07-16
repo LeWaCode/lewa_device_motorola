@@ -1,0 +1,26 @@
+/dev/oncrpc               0777   radio     system
+/dev/oncrpc/*             0777   radio     system
+# Compass
+/dev/akm8973_aot          0640   system    system
+/dev/akm8973_dev          0600   system    system
+# Accelerometer
+/dev/lis331dlh            0664   system    system
+# 3D HW Accel
+/dev/msm_hw3dc            0666   system    graphics
+/dev/msm_hw3dm            0660   system    graphics
+# Proximity Sensor
+/dev/proximity            0664   system    system
+# TCMD Goofiness
+/dev/blan_enable          0660   system    system
+/dev/misc_helper          0660   system    system
+# Bluetooth
+/dev/ttyHS0               0660   bluetooth bluetooth
+# Copybit requires more open perms
+/dev/graphics/fb0         0666   system    graphics
+# port_bridge
+/dev/ttyHSUSB0            0660   root      system
+# touchpad
+/dev/touchpad             0664   system    system
+
+/dev/block/mmcblk0p1      0644   root      root
+

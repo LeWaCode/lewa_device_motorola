@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Configurações Atrix</string>
+  <string name="main_title">Configurações Motorola Atrix</string>
+  <string name="navigation_configuration">Configuração do sensor de impressão digital</string>
+  <string name="hdmi_audio_title">Audio HDMI</string>
+  <string name="hdmi_audio_summary">Ativar ou desativar audio sobre HDMI</string>
+</resources>
