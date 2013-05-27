@@ -96,7 +96,14 @@ PRODUCT_PACKAGES += \
 	Usb \
 	su \
 	mot_boot_mode \
-	charge_only_mode
+	charge_only_mode \
+	lights.jordan \
+	sensors.jordan \
+	tiwlan_ap.ini \
+	hostapd.conf \
+	tiap_cu \
+	libtiOsLibAP \
+	tiap_loader
 
 # for jpeg hw encoder/decoder
 # PRODUCT_PACKAGES += libskiahw libOMX.TI.JPEG.Encoder libOMX.TI.JPEG.decoder
@@ -130,22 +137,28 @@ $(call inherit-product, device/motorola/jordan/jordan-blobs.mk)
 $(call inherit-product, device/motorola/jordan/bootmenu/bootmenu.mk)
 
 # Live wallpaper packages
-PRODUCT_PACKAGES += \
-        LiveWallpapers \
-        LiveWallpapersPicker \
-        MagicSmokeWallpapers \
-        VisualizationWallpapers
+#PRODUCT_PACKAGES += \
+#        LiveWallpapers \
+#        LiveWallpapersPicker \
+#        MagicSmokeWallpapers \
+#        VisualizationWallpapers
 
 # Publish that we support the live wallpaper feature.
-PRODUCT_COPY_FILES += \
-        packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml
+#PRODUCT_COPY_FILES += \
+#        packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml
 
 
 $(call inherit-product, build/target/product/full_base.mk)
 
-# Should be after the full_base include, which loads languages_full
-PRODUCT_LOCALES += hdpi
-
 PRODUCT_NAME := generic_jordan
 PRODUCT_DEVICE := MB525
+
+# copy default lockscreen theme by shenqi 2011-12-29
+
+PRODUCT_COPY_FILES += \
+         lewa/frameworks/lockscreen/WVGA/lockscreen.zip:/system/media/lockscreen.zip \
+         lewa/frameworks/theme/WVGA/default.lwt:/system/media/default.lwt
+
+# only use two language for lewa branch
+PRODUCT_LOCALES := zh_CN en_US hdpi
 

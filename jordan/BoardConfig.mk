@@ -30,6 +30,8 @@ BOARD_DEFY_MODEL := DEFY_FROYO
 USE_CAMERA_STUB := false
 BOARD_USES_GENERIC_AUDIO := false
 
+BOARD_NO_RGBX_8888 := true
+
 TARGET_NO_RECOVERY := false
 TARGET_NO_RADIOIMAGE := true
 TARGET_NO_BOOTLOADER := true
@@ -120,7 +122,7 @@ BOARD_NEVER_UMOUNT_SYSTEM := true
 #TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_generic
 
 # Override cyanogen squisher to customize our update zip package
-TARGET_CUSTOM_RELEASETOOL := ./device/motorola/jordan/releasetools/squisher
+TARGET_CUSTOM_RELEASETOOL := ./device/motorola/jordan/releasetools/Jordan_update
 
 # Jordan need 2nd-init binary from motorola common
 TARGET_NEEDS_MOTOROLA_HIJACK := true
@@ -140,6 +142,6 @@ ifeq ($(BOARD_DEFY_MODEL),DEFY_GINGER)
 BOARD_USE_CID_ROTATE_34 := true
 endif
 
-# add for lewa By YaoSheng
-LEWA_DPI := hdpi
-LEWA_PHONE := gsm
+# Add by jiangjiawen
+LEWA_CUSTOM_DEVICE := Defy
+

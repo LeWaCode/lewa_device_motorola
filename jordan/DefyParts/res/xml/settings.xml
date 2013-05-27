@@ -30,7 +30,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/audio_settings_title">
+   <!-- <PreferenceCategory android:title="@string/audio_settings_title">
 
         <PreferenceScreen android:key="audio_effects"
                           android:title="@string/audio_effects">
@@ -40,7 +40,7 @@
                              android:targetClass="com.bel.android.dspmanager.activity.DSPManager" />
         </PreferenceScreen>
 
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 
     <PreferenceCategory android:key="other"
                         android:title="@string/other_settings_title">

@@ -16,21 +16,20 @@
 ** limitations under the License.
 */
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
-    <!-- Defines the shutdown options shown in the reboot dialog. -->
-    <array name="shutdown_reboot_options" translatable="false">
-        <item>@string/reboot_reboot</item>
-        <item>@string/reboot_recovery</item>
-        <item>@string/reboot_bootmenu</item>
-    </array>
+    <!-- Wide media profile available 
+    <bool name="supportsWideProfile">true</bool> -->
 
-    <!-- Do not translate. Defines the shutdown actions passed to the kernel.
-         The first item should be empty for regular reboot. -->
-    <string-array name="shutdown_reboot_actions" translatable="false">
-        <item></item>
-        <item>recovery</item>
-        <item>bootmenu</item>
-    </string-array>
+    <!-- Autofocus parameters -->
+    <string name="touchFocusParameter">mot-areas-to-focus</string>
+    <bool name="touchFocusNeedsRect">true</bool>
 
+    <!-- FFC parameter filtering -->
+    <bool name="ffc_canFocus">false</bool>
+    <bool name="ffc_canZoom">false</bool>
+    <string name="ffc_supportedEffects">none</string>
+
+    <!-- Autofocus on camcorder start -->
+    <bool name="focusCamcorderAtStart">false</bool>
 </resources>

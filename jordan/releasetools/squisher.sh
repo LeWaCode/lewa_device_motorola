@@ -6,6 +6,8 @@
 # DEVICE_TOP=$ANDROID_BUILD_TOP/device/motorola/jordan
 # VENDOR_TOP=$ANDROID_BUILD_TOP/vendor/motorola/jordan
 
+CYANOGEN_RELEASE=true
+
 # Delete unwanted apps
 rm -f $REPACK/ota/system/app/RomManager.apk
 rm -f $REPACK/ota/system/app/FOTAKill.apk
@@ -34,7 +36,7 @@ if [ -n "$CYANOGEN_RELEASE" ]; then
   cat $DEVICE_TOP/releasetools/updater-script-rel >> $REPACK/ota/META-INF/com/google/android/updater-script
   cp -f $VENDOR_TOP/boot-222-179-4.smg $REPACK/ota/boot.img
   cp -f $VENDOR_TOP/devtree-222-179-2.smg $REPACK/ota/devtree.img
-  cp -f $DEVICE_TOP/logo-google.raw $REPACK/ota/logo.img
+  cp -f $VENDOR_TOP/logo-moto.raw $REPACK/ota/logo.img
 fi
 
 cp -f $DEVICE_OUT/root/init $REPACK/ota/system/bootmenu/2nd-init/init

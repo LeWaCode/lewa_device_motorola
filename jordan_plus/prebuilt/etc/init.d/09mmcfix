@@ -1,0 +1,9 @@
+#!/system/bin/sh
+#
+# load mmcfix module
+
+# Module location
+MODULE="/system/lib/modules/mmcfix.ko"
+
+# Load the module
+insmod $MODULE

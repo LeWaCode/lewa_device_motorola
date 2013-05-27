@@ -32,6 +32,7 @@ PRODUCT_COPY_FILES += \
 	device/motorola/jordan/prebuilt/etc/init.d/08backlight:system/etc/init.d/08backlight \
 	device/motorola/jordan/prebuilt/etc/init.d/80kineto:system/etc/init.d/80kineto \
 	device/motorola/jordan/prebuilt/etc/init.d/90multitouch:system/etc/init.d/90multitouch \
+	device/motorola/jordan/prebuilt/etc/init.d/09mmcfix:system/etc/init.d/09mmcfix \
 	device/motorola/jordan/prebuilt/etc/profile:system/etc/profile \
 	device/motorola/jordan/prebuilt/etc/sysctl.conf:system/etc/sysctl.conf \
 	device/motorola/jordan/prebuilt/etc/busybox.fstab:system/etc/fstab \
@@ -53,8 +54,8 @@ else
 endif
 
 # App
-PRODUCT_COPY_FILES += \
-	device/motorola/jordan/prebuilt/app/DroidSSHd.apk:system/app/DroidSSHd.apk \
-	device/motorola/jordan/prebuilt/lib/libNativeSSHd.so:system/lib/libNativeSSHd.so \
+#PRODUCT_COPY_FILES += \
+#	device/motorola/jordan/prebuilt/app/DroidSSHd.apk:system/app/DroidSSHd.apk \
+#	device/motorola/jordan/prebuilt/lib/libNativeSSHd.so:system/lib/libNativeSSHd.so \
 
 #end of jordan-blobs.mk

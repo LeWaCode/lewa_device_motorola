@@ -1,0 +1,63 @@
+#!/bin/bash
+
+DEVICE_OUT=$ANDROID_BUILD_TOP/out/target/product/jordan
+DEVICE_TOP=$ANDROID_BUILD_TOP/device/motorola/jordan
+VENDOR_TOP=$ANDROID_BUILD_TOP/vendor/motorola/jordan
+mkdir -p $DEVICE_OUT/temp
+  
+LEWA_OTA_FULL_PACKAGE=`ls ${DEVICE_OUT}/FULL_LeWa_ROM_Defy* | tail -n 1`
+
+cd $DEVICE_OUT/temp
+echo "extract update.zip"
+unzip -o -qq $LEWA_OTA_FULL_PACKAGE
+
+# Delete unwanted apps
+rm -f system/app/RomManager.apk
+rm -f system/app/FOTAKill.apk
+rm -f system/xbin/irssi
+
+# these scripts are not required
+rm system/etc/init.d/03firstboot
+rm system/etc/init.d/04modules
+
+# add an empty script to prevent logcat errors (moto init.rc)
+touch system/bin/mount_ext3.sh
+chmod +x system/bin/mount_ext3.sh
+
+mkdir -p system/etc/terminfo/x
+cp system/etc/terminfo/l/linux ./system/etc/terminfo/x/xterm
+
+# prebuilt boot, devtree, logo & updater-script
+rm -f boot.img
+cp -f $DEVICE_TOP/releasetools/updater-script ./META-INF/com/google/android/updater-script
+
+# keep multiboot specific files, if installed
+cat $DEVICE_TOP/releasetools/multiboot_backup_list.txt >> ./system/etc/custom_backup_list.txt
+
+# release builds contains a kernel, and do not backup kernel modules
+if [ -n "$CYANOGEN_RELEASE" ]; then
+  cat $DEVICE_TOP/releasetools/updater-script-rel >> ./META-INF/com/google/android/updater-script
+  cp -f $VENDOR_TOP/boot-222-179-4.smg ./boot.img
+  cp -f $VENDOR_TOP/devtree-222-179-2.smg ./devtree.img
+  cp -f $VENDOR_TOP/logo-moto.raw ./logo.img
+fi
+
+cp -f $DEVICE_OUT/root/init ./system/bootmenu/2nd-init/init
+cp -f $DEVICE_OUT/root/init.rc ./system/bootmenu/2nd-init/init.rc
+
+echo "Making Jordan Compatible Update script"
+cd $DEVICE_OUT
+
+echo Zipping Package
+cd $DEVICE_OUT/temp
+
+rm -rf $LEWA_OTA_FULL_PACKAGE
+zip -9yr $LEWA_OTA_FULL_PACKAGE * > /dev/null
+cd $DEVICE_OUT
+
+echo Cleanup...
+
+rm -rf $DEVICE_OUT/temp
+sh $DEVICE_TOP/releasetools/squisher
+
+echo done
